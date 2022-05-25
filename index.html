@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        // var imageSrc ="https://images.unsplash.com/photo-1643390920099-93ed8d1b605d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80";
+        // let imageDescription = "A snow covered mountain.";
+        // const dateUploaded = "Sept. 23, 2020";
+        // var imageId = 12;
+        // var showImage = true;
+
+        // var imageObject = {
+        //     imageSrc: "https://images.unsplash.com/photo-1643386777909-04835ade3530?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+        //     imageDescription : "A bottle.",
+        //     dateUploaded: "Sept. 23, 2020",
+        //     imageId: 13,
+        //     showImage: true
+        // };
+
+        // var images = [
+        //     {
+        //         imageSrc: "https://images.unsplash.com/photo-1643390920099-93ed8d1b605d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+        //         imageDescription : "A blob.",
+        //         dateUploaded: "Sept. 23, 2020",
+        //         imageId: 12,
+        //         showImage: true
+        //     },
+        //     imageObject,
+        //     {
+        //         imageSrc: "https://images.unsplash.com/photo-1643397652696-e633822828fd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=770&q=80",
+        //         imageDescription: "A car.",
+        //         dateUploaded: "Sept. 23, 2020",
+        //         imageId: 122,
+        //         showImage: true
+        //     },
+        // ];
+
+        const search = function() {
+            var keyWord = document.getElementById('searchText').value; // Gives input
+            var endpoint = `https://api.unsplash.com/search/photos?page=1&query=${keyWord}&client_id=gDke-mW4k9gTVYvqtEi9sVX7M6kyWp3zlV9YWl7HjZY`
+            getImages(endpoint);
+        }
+        
+        const getImages = function (endpoint) {
+            fetch(endpoint)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((response) => {
+                    var html = '';
+                    console.log(response);
+                
+                    response.results.forEach((image) => {  
+                    var imageSrc = image.urls.regular;
+                    var description = image.description || 'This image has no description.';
+                    var updatedHtml;
+
+                    if (!imageSrc) {
+                        updatedHtml = "No image exists."
+                    }
+                    else
+                        updatedHtml = `
+                        <a href="${image.links.html}" class="imageCard">
+                            <div class="image">
+                                <img src="${image.urls.regular}" />
+                            </div>
+                            <div class="description">${image.alt_description || 'No description'}</div>
+                        </a> `
+                    
+                    html += updatedHtml;
+            })     
+
+            document.getElementById('photoContainer').innerHTML = html;
+                })
+        };
+
+    </script>
+
+    <!-- HTML -->
+    <body>
+        <h1>Image Library</h1>
+        <div id="searchBarContainer">
+            <input id="searchText" type="text">
+            <button onClick="search()">Search</button>
+        </div>
+
+        <div id="photoContainer">
+
+        </div>
+    </body>
+
+    <!-- CSS Styling -->
+    <style>
+        body {
+            padding: 15px;
+        }
+        input {
+            padding: 10px;
+        }
+        button {
+            padding: 10px;
+            font-weight: bold;
+        }
+        #searchBarContainer {
+            padding: 10px;
+        }
+        #photoContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .imageCard {
+            width: 45;
+            margin: 10px;
+            border-radius: 20px;
+            background-color: #F3F4F6;
+            box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+        }
+        .image{
+            height: autp;
+            width: 100%;
+            overflow-y: hidden;
+        }
+        img {
+            width: 100%;
+            border-radius: 20px;
+            height: auto;
+        }
+        h1 {
+            font-weight: bolder;
+            color: blue;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+        a {
+            color: black;
+            text-decoration: none;
+        }
+    </style>
+</html>
